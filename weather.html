@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NeoWeather PRO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="weather.css">
+
+</head>
+
+<body class="day">
+
+<div class="rain" id="rain"></div>
+
+<div class="card">
+    <h2> 🌦️ Leo-Weather PRO </h2>
+
+    <div class="search">
+        <input id="city" placeholder="Enter city">
+        <button onclick="manualWeather()">Go</button>
+    </div>
+
+    <div class="icon" id="icon">☀️</div>
+    <div class="temp" id="temp">--°C</div>
+    <div class="city" id="cityName">Detecting...</div>
+    <div class="desc" id="desc">Weather</div>
+
+    <div class="stats">
+        <div class="stat" id="humidity">💧 --%</div>
+        <div class="stat" id="wind">🌬️ -- km/h</div>
+    </div>
+
+    <div class="footer"> When the sun goes down and the moon comes up </div>
+</div>
+
+<script>
+const demoData = {
+    sunny:{temp:34, desc:"Sunny", icon:"☀️"},
+    cloudy:{temp:28, desc:"Cloudy", icon:"☁️"},
+    rainy:{temp:26, desc:"Rainy", icon:"🌧️"},
+    night:{temp:24, desc:"Clear Night", icon:"🌙"}
+};
+
+function rainEffect(count){
+    const rain = document.getElementById("rain");
+    rain.innerHTML="";
+    for(let i=0;i<count;i++){
+        const drop=document.createElement("div");
+        drop.className="drop";
+        drop.style.left=Math.random()*100+"%";
+        drop.style.animationDuration=(0.5+Math.random())+"s";
+        rain.appendChild(drop);
+    }
+}
+
+function autoWeather(){
+    const hour=new Date().getHours();
+    if(hour>=18 || hour<6){
+        setWeather("night","Your Location");
+        document.body.className="night";
+    }else{
+        setWeather("sunny","Your Location");
+        document.body.className="day";
+    }
+}
+
+function manualWeather(){
+    const city=document.getElementById("city").value;
+    const type=["sunny","cloudy","rainy"][Math.floor(Math.random()*3)];
+    setWeather(type,city);
+}
+
+function setWeather(type,city){
+    const data=demoData[type];
+    document.getElementById("temp").innerHTML=data.temp+"°C";
+    document.getElementById("desc").innerHTML=data.desc;
+    document.getElementById("icon").innerHTML=data.icon;
+    document.getElementById("cityName").innerHTML=city.toUpperCase();
+    document.getElementById("humidity").innerHTML="💧 "+(40+Math.floor(Math.random()*40))+"%";
+    document.getElementById("wind").innerHTML="🌬️ "+(8+Math.floor(Math.random()*10))+" km/h";
+
+    if(type==="rainy") rainEffect(80);
+    else document.getElementById("rain").innerHTML="";
+}
+
+autoWeather();
+</script>
+
+</body>
+</html>
